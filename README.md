@@ -6,6 +6,7 @@
 - K3s is a lightweight Kubernetes distribution created by Rancher Labs.
 # How to set up Kubernetes Cluster
 ## Setting up each VMs as K3s Master nodes
+- Bridged
 1. 
 ```
 sudo apt update
@@ -80,12 +81,11 @@ nano config
 - On Master nodes (VMs):
 ```
 git clone https://github.com/xLazaki/sds-project-final.git
-
 cd sds-project-final
+```
 
-kubectl create namespace vote
-
+```
 kubectl create -f k3s-app/
 ```
 # Application Details
-Inspired by [Official Docker Samples' Example Voting App](https://github.com/dockersamples/example-voting-app) which 
+Modified Version of [Official Docker Samples' Example Voting App](https://github.com/dockersamples/example-voting-app) 
