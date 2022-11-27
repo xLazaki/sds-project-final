@@ -7,28 +7,29 @@
 # How to set up Kubernetes Cluster
 ## Setting up each VMs as K3s Master nodes
 - Bridged
-1. 
+1. Update system
 ```
 sudo apt update
 sudo apt upgrade -y
 ```
-2. 
+2. Allow tcp port 6443
 ```
 sudo ufw allow 6443/tcp
 ```
-3. 
+3. Install k3s
 ```
 curl -sfL https://get.k3s.io | INSTALL_K3S_SKIP_ENABLE=true sh -
 ```
-4. 
+4. Built cluster
 ```
 sudo k3s server --cluster-init --token=SECRET
 ```
+5. Join server
 
 ```
 sudo k3s server --server https://<master1ip>:6443 --token=SECRET
 ```
-5. Marks the master nodes as unschedulable using Kubernetes Cordon.
+6. Marks the master nodes as unschedulable using Kubernetes Cordon.
 ```
 sudo kubectl cordon <node_name>
 ```
@@ -40,7 +41,7 @@ sudo kubectl cordon <node_name>
 - ssh into each pis using their local hostname or IP address. To get an IP address, open the dashboard of your wifi router and looking for connected devices.  
 
 ### Config static IP
-1. 
+1. Go to DHCP config file
 ```
 sudo nano /etc/dhcpcd.conf
 ```
@@ -50,7 +51,7 @@ static routers = 192.168.0.1
 static domain_name_servers = 192.168.0.1
 static ip_address = 192.168.0.{200+เลขpi}/24
 ```
-3. 
+3. Reboot Pi
 ```
 sudo reboot
 ```
@@ -74,7 +75,7 @@ mkdir .kube
 cd .kube
 nano config
 ```
-- paste all content from k3s.yaml to config then save
+- paste all content from k3s.yaml to config, also don't forgot to change ip address to match your server's ip then save
 
 
 # How to deploy an application
@@ -86,6 +87,9 @@ cd sds-project-final
 
 ```
 kubectl create -f k3s-app/
+```
+```
+kubectl get pods
 ```
 # Application Details
 Modified Version of [Official Docker Samples' Example Voting App](https://github.com/dockersamples/example-voting-app) 
