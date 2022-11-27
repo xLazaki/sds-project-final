@@ -66,6 +66,7 @@ sudo nano /etc/dhcpcd.conf
 ```
 2. Find the settings of interface wlan0 (scroll down to the bottom) and change the following lines:
 ```
+interface wlan0
 static routers = <router_IP>
 static domain_name_servers = <router_DNS_IP>
 static ip_address = <pi_assigned_IP>
@@ -111,17 +112,34 @@ nano config
 ```
 scp /etc/rancher/k3s/k3s.yaml <username>@<IP>:~/.kube/config
 ```
-> <br>**Now, the setting up is finished.**<br>
+> **Now, the setting up is finished !**<br>
 > ✺◟(＾∇＾)◞✺ . . . . . ✺◟(＾∇＾)◞✺
 # How to deploy an application
-- On Master nodes (VMs):
+- On Master nodes (VMs) run the following commands to create the deployments and services objects:
 ```
 git clone https://github.com/xLazaki/sds-project-final.git
 cd sds-project-final
-```
-
-```
+kubectl create namespace vote
 kubectl create -f k3s-app/
 ```
-# Application Details
-Modified Version of [Official Docker Samples' Example Voting App](https://github.com/dockersamples/example-voting-app) 
+- The resulting pods are as belowed:
+![image](https://github.com/xLazaki/sds-project-final/blob/main/images/deploy_result.png)
+# Application
+## Architecture
+![image](https://github.com/xLazaki/sds-project-final/blob/main/images/app_architecture.png)
+- A front-end web app in Python which lets you vote between two options: Cats and Dogs 
+    - Using docker image from: https://hub.docker.com/r/taechitph/example-voting-app_vote
+- A Redis queue which collects new votes
+    - Using docker image from: https://hub.docker.com/_/redis
+- A .NET Core worker which consumes votes and stores them in Postgres database
+    - Using docker image from: https://hub.docker.com/r/taechitph/example-voting-app_worker
+- A Postgres database backed by a Docker volume 
+    - Using docker image from: https://hub.docker.com/_/postgres
+- A Node.js webapp which shows the results of the voting in real time
+    - Using docker image from: https://hub.docker.com/r/boomnatchanon/example_voting_app-result
+## Details
+- The vote interface is available on port 31000
+![image](https://github.com/xLazaki/sds-project-final/blob/main/images/vote-endpoint.png)
+- The result interface is available on port 31001.
+![image](https://github.com/xLazaki/sds-project-final/blob/main/images/result-endpoint.png)
+- Modified Version of [Official Docker Samples' Example Voting App](https://github.com/dockersamples/example-voting-app)
