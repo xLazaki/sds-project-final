@@ -139,7 +139,7 @@ kubectl create -f k3s-app/
     - Using docker image from: https://hub.docker.com/r/boomnatchanon/example_voting_app-result
 ## Details
 - The vote interface is available on port 31000
-![image](https://github.com/xLazaki/sds-project-final/blob/main/images/vote-endpoint.png)
+![image](https://github.com/xLazaki/sds-project-final/blob/main/images/vote_endpoint.png)
 - The result interface is available on port 31001.
 ![image](https://github.com/xLazaki/sds-project-final/blob/main/images/result-endpoint.png)
 - Modified Version of [Official Docker Samples' Example Voting App](https://github.com/dockersamples/example-voting-app)
