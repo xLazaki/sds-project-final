@@ -32,7 +32,7 @@ sudo k3s server --cluster-init --token=SECRET
 5. Join the second and third servers to the cluster using the shared secret token
 
 ```
-sudo k3s server --server https://<master1_ip>:6443 --token=SECRET
+sudo k3s server --server https://<master_IP>:6443 --token=SECRET
 ```
 6. Marks the master nodes as unschedulable using Kubernetes Cordon.
 ```
@@ -41,10 +41,22 @@ sudo kubectl cordon <node_name>
 
 ## Setting up each Pis as K3s Worker nodes
 ### Writing microSD card
-- Raspberry Pi Imager
-- ssh into each pis using their local hostname or IP address. To get an IP address, open the dashboard of your wifi router and looking for connected devices.  
+- Download and install [Raspberry Pi Imager](https://www.raspberrypi.com/software/) to a computer with an microSD card reader. Put the microSD card you'll use with your Raspberry Pi into the reader and run Raspberry Pi Imager.
+![image](https://github.com/xLazaki/sds-project-final/blob/master/images/rpi.png)
+> Raspberry Pi Imager is the quick and easy way to install Raspberry Pi OS and other operating systems to a microSD card, ready to use with your Raspberry Pi.
+- Write microSD card with the following configurations:
+    - Choose Raspberry Pi OS Lite (64-bit) as an operating system
+    - Set hostname
+    - Enable SSH using password authentication
+    - Set username and password
+    - Configure wireless LAN
+- After writing is done, ssh into each pis using their local hostname or IP address to remote control into each Pi. For an IP address, open the dashboard of your wifi router and looking for connected devices. 
+```
+ssh <username>@<hostname>.local
+ssh <username>@<IP>
+```
 
-### Config static IP
+### Static IP Configurations
 1. Go to DHCP config file in Pi
 ```
 sudo nano /etc/dhcpcd.conf
@@ -55,7 +67,8 @@ static routers = <router_IP>
 static domain_name_servers = <router_DNS_IP>
 static ip_address = <pi_assigned_IP>
 ```
-3. Reboot Pi
+![image](https://github.com/xLazaki/sds-project-final/blob/master/images/dhcpconf.png)
+3. Reboot Pi to make the change
 ```
 sudo reboot
 ```
@@ -64,23 +77,39 @@ sudo reboot
 > - ifconfig
 
 ### Installing K3s
-1. Download & Run Worker nodes 
+1. Before installing K3s, enable c-groups by modifying the configuration file /boot/firmware/cmdline.txt for the kubelet:
+```
+sudo nano /boot/firmware/cmdline.txt
+```
+And append the following options:
+```
+cgroup_enable=memory cgroup_memory=1
+```
+Save the file in your editor and reboot:
+```
+sudo reboot
+```
+2. Download & Run Worker nodes 
 ```
 curl -sfL https://get.k3s.io/ | K3S_URL=https://{IP’s server}:6443/ K3S_TOKEN=SECRET sh -
 ```
-2. Fix CA shit- Copy CA to each worker
--  On master nodes, get k3s.yaml
+3. To use kubectl on worker nodes (or any client nodes), we need to config the kubctl config file using kubeconfig file from master nodes.
+-  On master nodes, get k3s.yaml and copy the content
 ```
 cat /etc/rancher/k3s/k3s.yaml
 ```
-- On worker nodes, create kube config file
+- On worker nodes, paste the content of k3s.yaml which replacing the localhost IP 127.0.0.1 of the server with the actual IP address of the master node in your network to **~/.kube/config**.
 ```
 mkdir .kube
 cd .kube
 nano config
 ```
-- paste all content from k3s.yaml to config, also don't forgot to change ip address to match your server's ip then save
-
+- You can also easily sending the copy of the file from a master node to other nodes via ssh using the following commands:
+```
+scp /etc/rancher/k3s/k3s.yaml <username>@<IP>:~/.kube/config
+```
+> <br>**Now, the setting up is finished.**<br>
+> ✺◟(＾∇＾)◞✺ . . . . . ✺◟(＾∇＾)◞✺
 # How to deploy an application
 - On Master nodes (VMs):
 ```
@@ -90,9 +119,6 @@ cd sds-project-final
 
 ```
 kubectl create -f k3s-app/
-```
-```
-kubectl get pods
 ```
 # Application Details
 Modified Version of [Official Docker Samples' Example Voting App](https://github.com/dockersamples/example-voting-app) 
