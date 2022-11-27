@@ -42,8 +42,11 @@ sudo kubectl cordon <node_name>
 ## Setting up each Pis as K3s Worker nodes
 ### Writing microSD card
 - Download and install [Raspberry Pi Imager](https://www.raspberrypi.com/software/) to a computer with an microSD card reader. Put the microSD card you'll use with your Raspberry Pi into the reader and run Raspberry Pi Imager.
-![image](https://github.com/xLazaki/sds-project-final/blob/master/images/rpi.png)
+
+![image](https://github.com/xLazaki/sds-project-final/blob/main/master/images/rpi.png)
+
 > Raspberry Pi Imager is the quick and easy way to install Raspberry Pi OS and other operating systems to a microSD card, ready to use with your Raspberry Pi.
+
 - Write microSD card with the following configurations:
     - Choose Raspberry Pi OS Lite (64-bit) as an operating system
     - Set hostname
@@ -67,7 +70,7 @@ static routers = <router_IP>
 static domain_name_servers = <router_DNS_IP>
 static ip_address = <pi_assigned_IP>
 ```
-![image](https://github.com/xLazaki/sds-project-final/blob/master/images/dhcpconf.png)
+![image](https://github.com/xLazaki/sds-project-final/blob/main/master/images/dhcpconf.png)
 3. Reboot Pi to make the change
 ```
 sudo reboot
