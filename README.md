@@ -1,9 +1,13 @@
-# แกไม่รอดแน่
+# Pi Kube Cluster in a Box
+- Build a Kubernetes cluster using 5 Raspberry Pi's as worker nodes and 3 Ubuntu's VMs as master nodes (controllers).
+- Use wireless connection via private router.
+- 
+- Use K3s which is a lightweight Kubernetes distribution created by Rancher Labs.
 # Preparation
 - 5 x Raspberry Pi 3 Model B+ with microSD cards
 - 2 x Ubuntu VMs (using Virtual box)
-- (Optional) Router
-- K3s is a lightweight Kubernetes distribution created by Rancher Labs.
+- (Optional) Ethernet/WiFi Router (TP-Link)
+
 # How to set up Kubernetes Cluster
 ## Setting up each VMs as K3s Master nodes
 - Bridged

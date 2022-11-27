@@ -15,7 +15,7 @@ spec:
         app: result
     spec:
       containers:
-      - image: taechitph/example-voting-app_result:latest
+      - image: boomnatchanon/example_voting_app-result:latest
         name: result
         ports:
         - containerPort: 80
