@@ -145,14 +145,18 @@ kubectl create -f k3s-app/
 ![image](https://github.com/xLazaki/sds-project-final/blob/main/images/vote_endpoint.png)
 - The result interface is available on port 31001.
 ![image](https://github.com/xLazaki/sds-project-final/blob/main/images/result-endpoint.png)
-- Modified Version of [Official Docker Samples' Example Voting App](https://github.com/dockersamples/example-voting-app) (which images available only for amd architecture)
+- Inspired by [Official Docker Samples' Example Voting App](https://github.com/dockersamples/example-voting-app) (which images available only for amd architecture)
 # Video Demo
 Demo deployment of the application and fault-tolerance test by pulling each Raspberry Pi offline, one at a time. Client requests should be successful after containers are online.<br>
 [Link to youtube](https://www.youtube.com/watch?v=lbz0jnJqy6A)
-# Team 
+# Team Members
 Natchanon Panthuwadeethorn
 
 Nutchapol Winmoon
 
 Taechit Phowthongbutr
+
+Uttanon Ausungnoen
+
+Wichaphon Kiattisin
 
