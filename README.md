@@ -1,4 +1,5 @@
 # Pi Kube Cluster Project
+- The presentation
 - Build a Kubernetes cluster using 5 Raspberry Pi's as worker nodes and 3 Ubuntu's VMs as master nodes (controllers).
 - Use wireless connection via private router.
 - Build and deploy an application on the cluster which contain 5 different containers providing different services. Every containers are dependent on each other which require container networking.
@@ -125,6 +126,7 @@ kubectl create -f k3s-app/
 - The resulting pods are as belowed:
 ![image](https://github.com/xLazaki/sds-project-final/blob/main/images/deploy_result.png)
 # Application
+
 ## Architecture
 ![image](https://github.com/xLazaki/sds-project-final/blob/main/images/app_architecture.png)
 - A front-end web app in Python which lets you vote between two options: Cats and Dogs 
@@ -137,9 +139,20 @@ kubectl create -f k3s-app/
     - Using docker image from: https://hub.docker.com/_/postgres
 - A Node.js webapp which shows the results of the voting in real time
     - Using docker image from: https://hub.docker.com/r/boomnatchanon/example_voting_app-result
+
 ## Details
 - The vote interface is available on port 31000
 ![image](https://github.com/xLazaki/sds-project-final/blob/main/images/vote_endpoint.png)
 - The result interface is available on port 31001.
 ![image](https://github.com/xLazaki/sds-project-final/blob/main/images/result-endpoint.png)
-- Modified Version of [Official Docker Samples' Example Voting App](https://github.com/dockersamples/example-voting-app)
+- Modified Version of [Official Docker Samples' Example Voting App](https://github.com/dockersamples/example-voting-app) (which images available only for amd architecture)
+# Video Demo
+Demo deployment of the application and fault-tolerance test by pulling each Raspberry Pi offline, one at a time. Client requests should be successful after containers are online.<br>
+[Link to youtube](https://www.youtube.com/watch?v=lbz0jnJqy6A)
+# Team 
+Natchanon Panthuwadeethorn
+
+Nutchapol Winmoon
+
+Taechit Phowthongbutr
+
