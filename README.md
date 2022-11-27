@@ -1,59 +1,59 @@
-# Pi Kube Cluster in a Box
+# Pi Kube Cluster Project
 - Build a Kubernetes cluster using 5 Raspberry Pi's as worker nodes and 3 Ubuntu's VMs as master nodes (controllers).
 - Use wireless connection via private router.
-- 
-- Use K3s which is a lightweight Kubernetes distribution created by Rancher Labs.
+- Build and deploy an application on the cluster which contain 5 different containers providing different services. Every containers are dependent on each other which require container networking.
+- Use K3s, a lightweight Kubernetes distribution created by Rancher Labs.
+
 # Preparation
 - 5 x Raspberry Pi 3 Model B+ with microSD cards
-- 2 x Ubuntu VMs (using Virtual box)
-- (Optional) Ethernet/WiFi Router (TP-Link)
+- 3 x Ubuntu VMs (using Virtual box)
+- Ethernet/WiFi Router (using TP-Link TL WR841N)
 
 # How to set up Kubernetes Cluster
 ## Setting up each VMs as K3s Master nodes
-- Bridged
+- Set network adapter to bridged networking to make VMs accessible from the network and attain IP address of the VMs.
 1. Update system
 ```
 sudo apt update
 sudo apt upgrade -y
 ```
-2. Allow tcp port 6443
+2. Allow ports on firewall that will be used to communicate between the master and the worker nodes (6443 - https port).
 ```
 sudo ufw allow 6443/tcp
 ```
-3. Install k3s
+3. Install K3s from https://get.k3s.io which contain shell script for installing K3s
 ```
 curl -sfL https://get.k3s.io | INSTALL_K3S_SKIP_ENABLE=true sh -
 ```
-4. Built cluster
+4. Launch a server node with the cluster-init flag to enable clustering and a token that will be used as a shared secret to join nodes to the cluster
 ```
 sudo k3s server --cluster-init --token=SECRET
 ```
-5. Join server
+5. Join the second and third servers to the cluster using the shared secret token
 
 ```
-sudo k3s server --server https://<master1ip>:6443 --token=SECRET
+sudo k3s server --server https://<master1_ip>:6443 --token=SECRET
 ```
 6. Marks the master nodes as unschedulable using Kubernetes Cordon.
 ```
 sudo kubectl cordon <node_name>
 ```
 
-
 ## Setting up each Pis as K3s Worker nodes
 ### Writing microSD card
-
+- Raspberry Pi Imager
 - ssh into each pis using their local hostname or IP address. To get an IP address, open the dashboard of your wifi router and looking for connected devices.  
 
 ### Config static IP
-1. Go to DHCP config file
+1. Go to DHCP config file in Pi
 ```
 sudo nano /etc/dhcpcd.conf
 ```
 2. Find the settings of interface wlan0 (scroll down to the bottom) and change the following lines:
 ```
-static routers = 192.168.0.1
-static domain_name_servers = 192.168.0.1
-static ip_address = 192.168.0.{200+เลขpi}/24
+static routers = <router_IP>
+static domain_name_servers = <router_DNS_IP>
+static ip_address = <pi_assigned_IP>
 ```
 3. Reboot Pi
 ```
@@ -80,7 +80,6 @@ cd .kube
 nano config
 ```
 - paste all content from k3s.yaml to config, also don't forgot to change ip address to match your server's ip then save
-
 
 # How to deploy an application
 - On Master nodes (VMs):
